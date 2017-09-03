@@ -13,6 +13,7 @@ import { GlobalService } from '../../app/services/global.service';
 
 import { CategoryPage } from '../category/category';
 import { LocationPage } from '../location/location';
+import { FilterPage } from '../filter/filter';
 
 @Component({
 	selector: 'page-home',
@@ -21,6 +22,8 @@ import { LocationPage } from '../location/location';
 export class HomePage {
 	public loading:Loading;
 	host: string;
+
+	categoryPath: Array<{any}> = [];
 
 	productIsMoreAvailable: boolean = false;
 	productPage: number = 1;
@@ -65,7 +68,10 @@ export class HomePage {
 		let category = this.global.getCategory();
 		let filter: any = {};
 		if (category) {
-			filter.category = category.id;
+			filter.category = category.item.id;
+			this.categoryPath = category.path;
+		} else {
+			this.categoryPath = [];
 		}
 
 		this.api.fetchProducts(this.productPage, filter, (response) => {
@@ -169,5 +175,15 @@ export class HomePage {
 		});
 		selectCategoryModal.present();
 //		this.menuCtrl.toggle();
+	}
+
+	openFilter() {
+		let filterModal = this.modalCtrl.create(FilterPage);
+		filterModal.onDidDismiss(data => {
+			if (data.submitted) {
+				// this.global.toggleCategory();
+			}
+		});
+		filterModal.present();
 	}
 }

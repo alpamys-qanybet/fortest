@@ -14,6 +14,7 @@ import { GlobalService } from '../../app/services/global.service';
 })
 export class SubcategoryPage {
 	selectedItem: any;
+	path: Array<{any}>;
 	categoryList: Array<{any}>;
 	current: any;
 
@@ -25,6 +26,7 @@ export class SubcategoryPage {
 		private global: GlobalService
 	) {
 		this.selectedItem = navParams.get('item');
+		this.path = navParams.get('path');
 		this.current = navParams.get('current');
 
 		let loader = this.loadingCtrl.create();
@@ -48,20 +50,30 @@ export class SubcategoryPage {
 	}
 
 	itemTapped(event, item) {
+		let path = this.path;
+		path.push(item);
+			
 		if (item.is_parent == 0) {
-			this.global.setCategory(item);
+			this.global.setCategory({
+				item: item,
+				path: path
+			});
 			this.dismiss();
 		}
 		else {
 			this.navCtrl.push(SubcategoryPage, {
 				item: item,
+				path: path,
 				current: this.current
 			});
 		}
 	}
 
 	selectAll(event) {
-		this.global.setCategory(this.selectedItem);
+		this.global.setCategory({
+			item: this.selectedItem,
+			path: this.path
+		});
 		this.dismiss();
 	}
 

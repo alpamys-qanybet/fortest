@@ -1,0 +1,30 @@
+<ion-header>
+	<ion-toolbar>
+		<ion-buttons left>
+			<button ion-button (click)="dismiss()">
+				<ion-icon name="md-close" large></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-title>Фильтр</ion-title>
+		<ion-buttons right>
+			<button ion-button (click)="apply()">
+				Применить
+			</button>
+		</ion-buttons>
+	</ion-toolbar>
+</ion-header>
+
+<ion-content>
+	Мой фильтр
+	<ion-list>
+		<ion-item *ngFor="let c of characteristics">
+			<!-- (click)="itemTapped($event, c)" -->
+			{{c.name}}
+			<select [(ngModel)]="c.selected">
+				<option *ngFor="let character of c.values" [ngValue]="character">{{character.value}}</option>
+			</select>
+			<!-- <ion-icon name="arrow-forward" item-right></ion-icon>			 -->
+		</ion-item>
+	</ion-list>
+
+</ion-content>

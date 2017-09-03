@@ -28,7 +28,7 @@ export class CategoryPage {
 	) {
 		let category = this.global.getCategory();
 		if (category) {
-			this.current = category.id;
+			this.current = category.item.id;
 		}
 		let loader = this.loadingCtrl.create();
 		
@@ -52,12 +52,16 @@ export class CategoryPage {
 
 	itemTapped(event, item) {
 		if (item.is_parent == 0) {
-			this.global.setCategory(item);
+			this.global.setCategory({
+				item: item,
+				path: [item]
+			});
 			this.viewCtrl.dismiss({submitted: true});
 		}
 		else {
 			this.navCtrl.push(SubcategoryPage, {
 				item: item,
+				path: [item],
 				current: this.current
 			});
 		}

@@ -38,6 +38,18 @@ export class ApiService {
 		});
 	}
 */
+	fetchCategory(id, fn, fnErr) {
+		let url = this.baseUrl + '/category/' + id;
+
+		this.http.get(url)
+		.timeout(this.timeoutSequence)
+		.map(response => response.json())
+		.subscribe(data => {
+			fn(data);
+		}, (err)=> {
+			fnErr(err);
+		});
+	}
 
 	fetchCategoryRoot(fn, fnErr) {
 		let url = this.baseUrl + '/category';

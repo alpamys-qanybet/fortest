@@ -13,7 +13,7 @@
 			(ionClear)="clearSearch($event)">
 		</ion-searchbar>
 		<ion-buttons end>
-			<button ion-button icon-only (click)="toggleRightMenu()">
+			<button ion-button icon-only (click)="openFilter()">
 				<ion-icon name="options"></ion-icon>
 			</button>
 		</ion-buttons>
@@ -21,6 +21,10 @@
 </ion-header>
 
 <ion-content padding>
+	<span *ngFor="let category of categoryPath">
+		{{category.name}},
+	</span>
+
 	<ion-refresher (ionRefresh)="doRefreshProduct($event)">
 		<ion-refresher-content></ion-refresher-content>
 	</ion-refresher>
