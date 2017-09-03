@@ -29,6 +29,9 @@ export class HomePage {
 	productPage: number = 1;
 	productList = [];
 
+	mode: string = 'grid'; // 'grid', 'list'
+	pagination: any = [];
+	
 	searchInput: string = '';
 
 	constructor(
@@ -40,6 +43,7 @@ export class HomePage {
 		private keyboard: Keyboard,
 		private global: GlobalService
 	) {
+		this.pagination = [];
 		this.host = this.global.getHost();
 
 		this.init();
@@ -62,6 +66,40 @@ export class HomePage {
 		}, ()=> {
 			loader.dismiss();
 		});
+	}
+
+	paginate(list, name, interval) {
+		var i, page, _i, _ref;
+
+		this.pagination[name] = [];
+
+		if (list.length === 0) {
+			this.pagination[name].push({begin:0, end:1});
+			return;
+		}
+
+		// for (i in [0..list.length-1] by interval) {
+		for (i = _i = 0, _ref = list.length - 1; 0 <= _ref ? _i <= _ref : _i >= _ref; i = _i += interval) {
+			page = {}
+			page.begin = i;
+			page.end = i + interval;
+
+			this.pagination[name].push(page);
+		}
+	}
+
+	toggleMode() {
+		let loader = this.loadingCtrl.create();
+		loader.present();
+		if (this.mode == 'grid') {
+			this.mode = 'list';
+		}
+		else {
+			this.mode = 'grid';
+		}
+		setTimeout(()=> {
+			loader.dismiss();
+		}, 400);
 	}
 
 	processProduct(onInit, fn, fnErr) {
@@ -95,6 +133,8 @@ export class HomePage {
 			this.productIsMoreAvailable = response.info.currentPage < response.info.pageCount;
 			this.productPage++;
 			this.productList = this.productList.concat(list);
+
+			this.paginate(this.productList, 'grid', 2);
 			fn();
 		}, (err) => {
 			fnErr();
@@ -201,5 +241,9 @@ export class HomePage {
 			}
 		});
 		filterModal.present();
+	}
+
+	openProduct(item) {
+
 	}
 }

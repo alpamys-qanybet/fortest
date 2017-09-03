@@ -1,21 +1,3 @@
-/*
-const convertMapToObj = ( aMap => {
-	let obj = {};
-	aMap.forEach ((v,k) => { obj[k] = v });
-	return obj;
-});
-
-const convertObjToMap = ( obj => {
-	if (!obj) {
-		obj = {};
-	}
-
-	let mp = new Map;
-	Object.keys ( obj ). forEach (k => { mp.set(k, obj[k]) });
-	return mp;
-});
-*/
-
 import * as _ from 'lodash';
 
 import { Injectable } from '@angular/core';
@@ -129,6 +111,12 @@ export class GlobalService {
 
 	toggleFilter() {
 		this.filterObserver.next();
+	}
+
+	resetFilter() {
+		this.clearCharacteristics();
+		this.clearCategory();
+		localStorage.removeItem('filter');
 	}
 
 /*

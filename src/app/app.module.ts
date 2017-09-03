@@ -44,7 +44,8 @@ import { Keyboard } from '@ionic-native/keyboard';
     BrowserModule,
     HttpModule,
     IonicModule.forRoot(MyApp, {
-  //    menuType: 'reveal'
+      iconMode: 'ios'
+//    menuType: 'reveal'
     })
   ],
   bootstrap: [IonicApp],

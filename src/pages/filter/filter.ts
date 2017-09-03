@@ -5,6 +5,8 @@ import {
 	ViewController
 } from 'ionic-angular';
 
+import {isNumeric} from 'rxjs/util/isNumeric';
+
 import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
 
@@ -18,6 +20,12 @@ export class FilterPage {
 	characteristics: Array<{any}> = [];
 	characteristicsFilter = new Map<number, any>(); // : Map<number, any>
 	filterHasChange: boolean = false;
+	category: any;
+	price: any = {
+		from: null,
+		to: null
+	};
+	range: number = 25;
 
 	constructor(
 		public navCtrl: NavController,
@@ -46,6 +54,39 @@ export class FilterPage {
 			}, (err) => {
 			});
 		}
+		this.category = category;
+		console.log(this.category);	
+	}
+
+	priceFromChanged(event) {
+		if (isNumeric(event.value)) {
+			let n = Number(event.value);
+			if (n > 0) {
+				event.value = n;
+			}
+			else {
+				event.value = 0;
+			}
+		} else {
+			event.value = 0;
+		}
+	}
+
+	priceToChanged(event) {
+		if (isNumeric(event.value)) {
+			let n = Number(event.value);
+			if (n > 0) {
+				event.value = n;
+			}
+			else {
+				event.value = 0;
+			}
+		} else {
+			event.value = 0;
+		}
+	}
+
+	rangeChanged(event): void {
 	}
 
 	reloadCharacteristicsValues() {
@@ -72,5 +113,27 @@ export class FilterPage {
 			characteristics: item,
 			selected: this.characteristicsFilter.get(item.id)
 		});
+	}
+
+	openCategories() {
+		console.log('openCategories');
+/*
+		let selectCategoryModal = this.modalCtrl.create(CategoryPage);
+		selectCategoryModal.onDidDismiss(data => {
+			if (data.submitted) {
+				this.global.toggleCategory();
+			}
+		});
+		selectCategoryModal.present();
+*/
+	}
+
+	openLocation() {
+		console.log('openLocation');
+	}
+
+	resetAllFilters() {
+		this.global.resetFilter();
+		this.viewCtrl.dismiss({submitted: true});
 	}
 }

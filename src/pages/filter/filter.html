@@ -16,6 +16,68 @@
 
 <ion-content>
 	<ion-list>
+		<ion-item (click)="openCategories()">
+			<ion-thumbnail item-left>
+				<img *ngIf="!category" src="assets/category/png/all.png"/>
+				<img *ngIf="category" src="assets/category/png/{{category.path[0].slug}}.png"/>
+			</ion-thumbnail>
+			<h2>Изменить категорию</h2>
+			<p *ngIf="!category">Выбраны все категория</p>
+			<p *ngIf="category">
+				{{category.path[0].name}}
+				<span *ngIf="category.path[0].id != category.item.id"> - {{category.item.name}}</span>
+			</p>
+		</ion-item>
+
+		<ion-item (click)="openLocation()">
+			<ion-thumbnail item-left>
+				<ion-icon name="pin-outline" large></ion-icon>
+			</ion-thumbnail>
+			<h2>Изменить местоположение</h2>
+			<p *ngIf="!category">По всей стране</p>
+			<p *ngIf="category">
+				{{category.path[0].name}}
+				<span *ngIf="category.path[0].id != category.item.id"> - {{category.item.name}}</span>
+			</p>
+		</ion-item>
+
+		<ion-row>
+			<ion-col col-2>
+				<ion-thumbnail item-left>
+					<ion-icon name="pricetags-outline" large></ion-icon>
+				</ion-thumbnail>
+			</ion-col>
+			<ion-col col-5>
+				<ion-input
+					type="tel"
+					[(ngModel)]="price.from"
+					placeholder="Мин"
+					(ionChange)="priceFromChanged($event)">
+				</ion-input>
+				<p>Цена от</p>
+			</ion-col>
+			<ion-col col-5>
+				<ion-input
+					type="tel"
+					[(ngModel)]="price.to"
+					placeholder="Макс"
+					(ionChange)="priceToChanged($event)">
+				</ion-input>
+				<p>Цена до</p>
+			</ion-col>
+		</ion-row>
+
+		<ion-item>
+			<ion-thumbnail item-left>
+				<ion-icon name="disc-outline" large></ion-icon>
+			</ion-thumbnail>
+			<ion-label>На расстоянии {{range}}км</ion-label>
+			<ion-range min="0" max="50" step="5"
+				[(ngModel)]="range"
+				(ionChange)="rangeChanged($event)">
+			</ion-range>
+		</ion-item>
+		
 		<ion-item *ngFor="let c of characteristics" (click)="openCharacteristics($event, c)">
 			<ion-label>
 				{{c.name}}
@@ -27,3 +89,8 @@
 	</ion-list>
 
 </ion-content>
+
+
+<ion-footer>
+	<button ion-button block outline (click)="resetAllFilters()">Сбросить фильтр</button>
+</ion-footer>

@@ -13,6 +13,10 @@
 			(ionClear)="clearSearch($event)">
 		</ion-searchbar>
 		<ion-buttons end>
+			<button ion-button icon-only (click)="toggleMode()">
+				<ion-icon name="grid-outline" *ngIf="mode == 'grid'"></ion-icon>
+				<ion-icon name="list-box-outline" *ngIf="mode == 'list'"></ion-icon>
+			</button>
 			<button ion-button icon-only (click)="openFilter()">
 				<ion-icon name="options"></ion-icon>
 			</button>
@@ -20,25 +24,58 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content>
 	<span *ngFor="let category of categoryPath">
 		{{category.name}},
 	</span>
 
-	<ion-refresher (ionRefresh)="doRefreshProduct($event)">
-		<ion-refresher-content></ion-refresher-content>
-	</ion-refresher>
-
-	<ion-card *ngFor="let item of productList">
-		<ion-item class="card-title">
-			<ion-thumbnail item-left>
-				<img [src]="host+'/'+item.photo"/>
-			</ion-thumbnail>
-			<h2 (click)="openServicePage($event,item)">{{item.name}}</h2>
-		</ion-item>
-	</ion-card>
-
-	<ion-infinite-scroll (ionInfinite)="doInfiniteProduct($event)" [enabled]="productIsMoreAvailable">
-		<ion-infinite-scroll-content></ion-infinite-scroll-content>
-	</ion-infinite-scroll>
+	<div [ngSwitch]="mode">
+		<ion-refresher (ionRefresh)="doRefreshProduct($event)">
+			<ion-refresher-content></ion-refresher-content>
+		</ion-refresher>
+		<div *ngSwitchCase="'list'">
+			<ion-row *ngFor="let item of productList">
+				<ion-col col-12>
+					<ion-card class="product product-list" (click)="openProduct(item)">
+						<ion-item>
+							<ion-thumbnail item-left>
+								<div class="box">
+									<img [src]="host+'/'+item.photo"/>
+								</div>
+							</ion-thumbnail>
+							<h2><span *ngIf="!item.name">&nbsp;</span>{{item.name}}</h2>
+							<p><span *ngIf="!item.description">&nbsp;</span>{{item.description}}</p>
+							<div class="product-cost product-cost-list">
+								<span *ngIf="item.cost">{{item.cost}} Р</span>
+								<span *ngIf="item.min_cost">{{item.min_cost}} Р</span>
+							</div>
+						</ion-item>
+					</ion-card>
+				</ion-col>
+			</ion-row>
+		</div>
+		<div *ngSwitchCase="'grid'">
+			<ion-row *ngFor="let page of pagination['grid']">
+				<ion-col col-6 *ngFor="let item of productList.slice(page.begin, page.end)">
+					<ion-card class="product product-grid" (click)="openProduct(item)">
+						<ion-item>
+							<div class="box">
+								<img [src]="host+'/'+item.photo"/>
+							</div>
+							<h2><span *ngIf="!item.name">&nbsp;</span>{{item.name}}</h2>
+							<p><span *ngIf="!item.description">&nbsp;</span>{{item.description}}</p>
+							
+							<div class="product-cost product-cost-grid">
+								<span *ngIf="item.cost">{{item.cost}} Р</span>
+								<span *ngIf="item.min_cost">{{item.min_cost}} Р</span>
+							</div>
+						</ion-item>
+					</ion-card>
+				</ion-col>
+			</ion-row>
+		</div>
+		<ion-infinite-scroll (ionInfinite)="doInfiniteProduct($event)" [enabled]="productIsMoreAvailable">
+			<ion-infinite-scroll-content></ion-infinite-scroll-content>
+		</ion-infinite-scroll>
+	</div>
 </ion-content>
