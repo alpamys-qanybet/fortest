@@ -1,0 +1,19 @@
+<ion-header>
+	<ion-navbar>
+		<ion-title>
+			<span *ngIf="selectedItem">{{selectedItem.title}}</span>
+		</ion-title>
+	</ion-navbar>
+</ion-header>
+
+<ion-content>
+	<ion-list>
+		<ion-item (click)="selectAll($event)">
+			<ion-label>Выбрать все</ion-label>
+		</ion-item>
+		<ion-item *ngFor="let location of locationList" (click)="itemTapped($event, location)">
+			{{location.title}}
+			<ion-icon name="arrow-forward" item-right *ngIf="location.hasChildren == 1"></ion-icon>
+		</ion-item>
+	</ion-list>
+</ion-content>

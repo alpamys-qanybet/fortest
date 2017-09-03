@@ -1,7 +1,23 @@
 <ion-header>
-	<ion-navbar>
-		<ion-title>Home</ion-title>
-	</ion-navbar>
+	<ion-toolbar color="primary">
+		<ion-buttons left>
+			<button ion-button icon-only (click)="openCategories($event)">
+				<ion-icon name="menu"></ion-icon>
+			</button>
+		</ion-buttons>
+		<ion-searchbar
+			placeholder="Поиск"
+			[(ngModel)]="searchInput"
+			debounce="900"
+			(ionInput)="search($event)"
+			(ionClear)="clearSearch($event)">
+		</ion-searchbar>
+		<ion-buttons end>
+			<button ion-button icon-only (click)="toggleRightMenu()">
+				<ion-icon name="options"></ion-icon>
+			</button>
+		</ion-buttons>
+	</ion-toolbar>
 </ion-header>
 
 <ion-content padding>

@@ -1,26 +1,51 @@
 import { Component } from '@angular/core';
-import { LoadingController, NavController } from 'ionic-angular';
+import { 
+	NavController,
+	Loading,
+	LoadingController,
+	ModalController,
+	MenuController
+} from 'ionic-angular';
+import { Keyboard } from '@ionic-native/keyboard';
 
 import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
+
+import { CategoryPage } from '../category/category';
+import { LocationPage } from '../location/location';
 
 @Component({
 	selector: 'page-home',
 	templateUrl: 'home.html'
 })
 export class HomePage {
+	public loading:Loading;
+	host: string;
+
 	productIsMoreAvailable: boolean = false;
 	productPage: number = 1;
 	productList = [];
-	host: string;
+
+	searchInput: string = '';
 
 	constructor(
 		public navCtrl: NavController,
 		private loadingCtrl: LoadingController,
-    	private api: ApiService,
+		public modalCtrl: ModalController,
+		public menuCtrl: MenuController,
+		private api: ApiService,
+		private keyboard: Keyboard,
 		private global: GlobalService
 	) {
 		this.host = this.global.getHost();
+
+		this.init();
+		this.global.categoryChange.subscribe((data) => {
+			this.init();
+		});
+	}
+
+	init() {
 		let loader = this.loadingCtrl.create();
 		loader.present();
 
@@ -28,7 +53,7 @@ export class HomePage {
 			loader.dismiss();
 		}, ()=> {
 			loader.dismiss();
-		})
+		});
 	}
 
 	processProduct(onInit, fn, fnErr) {
@@ -37,10 +62,15 @@ export class HomePage {
 			this.productList = [];
 		}
 
-		this.api.fetchProducts(this.productPage, (data) => {
-			console.log(data);
-			let list = data.response.data;
-			this.productIsMoreAvailable = data.info.currentPage < data.info.pageCount;
+		let category = this.global.getCategory();
+		let filter: any = {};
+		if (category) {
+			filter.category = category.id;
+		}
+
+		this.api.fetchProducts(this.productPage, filter, (response) => {
+			let list = response.response.data;
+			this.productIsMoreAvailable = response.info.currentPage < response.info.pageCount;
 			this.productPage++;
 			this.productList = this.productList.concat(list);
 			fn();
@@ -68,5 +98,76 @@ export class HomePage {
 		else {
 			infiniteScroll.complete();
 		}
+	}
+
+/*
+	closeSearchBar(): void {
+		this.keyboard.close();
+		this.isSearching = false;
+	}
+
+	processSearch(onInit, fn, fnErr) {
+		if (onInit) {
+			this.searchOffset = 0;
+			this.searchLimit = 10;
+			this.searchList = [];
+		}
+		else {
+			this.searchLimit = 6;
+		}
+
+		this.api.searchForHistory(this.searchInput, this.searchOffset, this.searchLimit, (res) => {
+			let list = res.list;
+			this.isSearchMoreAvailable = res.more_available;
+			this.searchOffset = this.searchOffset + this.searchLimit;
+			this.searchList = this.searchList.concat(list);
+			fn();
+		}, (err) => {
+			fnErr();
+		});
+	}
+
+	doSearchInfinite(infiniteScroll:any) {
+		if (this.isSearchMoreAvailable) {
+			this.processSearch(false, ()=> {
+				infiniteScroll.complete();
+			}, ()=> {
+				infiniteScroll.complete();
+			});
+		}
+		else {
+			infiniteScroll.complete();
+			// infiniteScroll.enable(false);
+		}
+	}
+*/
+
+	search(event) {
+		if (this.searchInput.length > 0) {
+			this.loading = this.loadingCtrl.create();
+			this.loading.present();
+
+			//this.processSearch(true, ()=> {
+				this.loading.dismiss();
+			//}, ()=> {
+				this.loading.dismiss();
+			//});
+		}
+	}
+
+	clearSearch(event) {
+		this.keyboard.close();
+	}
+
+	openCategories(event) {
+		// let selectCategoryModal = this.modalCtrl.create(LocationPage);
+		let selectCategoryModal = this.modalCtrl.create(CategoryPage);
+		selectCategoryModal.onDidDismiss(data => {
+			if (data.submitted) {
+				this.global.toggleCategory();
+			}
+		});
+		selectCategoryModal.present();
+//		this.menuCtrl.toggle();
 	}
 }
