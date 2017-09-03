@@ -15,7 +15,7 @@
 		<ion-item *ngFor="let category of categoryList" (click)="itemTapped($event, category)">
 			{{category.name}}
 			<ion-icon name="checkmark" item-right *ngIf="category.id == current"></ion-icon>
-			<!-- <ion-icon name="arrow-forward" item-right *ngIf="category.is_parent == 1"></ion-icon>			 -->
+			<!-- <ion-icon name="arrow-forward" item-right *ngIf="category.is_parent == 1" class="icon-forward"></ion-icon>			 -->
 		</ion-item>
 	</ion-list>
 </ion-content>

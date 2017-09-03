@@ -79,12 +79,10 @@
 		</ion-item>
 		
 		<ion-item *ngFor="let c of characteristics" (click)="openCharacteristics($event, c)">
-			<ion-label>
-				{{c.name}}
-				<span *ngIf="!characteristicsFilter.has(c.id)">Все</span>
-				<span *ngIf="characteristicsFilter.has(c.id)">{{characteristicsFilter.get(c.id).value}}</span>	
-			</ion-label>
-			<ion-icon name="arrow-forward" item-right></ion-icon>
+			<h2>{{c.name}}</h2>
+			<p item-right class="characteristics-value" *ngIf="!characteristicsFilter.has(c.id)">Все</p>
+			<p item-right class="characteristics-value" *ngIf="characteristicsFilter.has(c.id)">{{characteristicsFilter.get(c.id).value}}</p>	
+			<ion-icon name="arrow-forward" item-right class="icon-forward"></ion-icon>
 		</ion-item>
 	</ion-list>
 
