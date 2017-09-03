@@ -98,9 +98,24 @@ export class ApiService {
 */
 	fetchProducts(page, filter, fn, fnErr) {
 		let url = this.baseUrl + '/product';
+		let p = [];
 		if (filter.category) {
-			url += '?ProductSearch[category_id]=' + filter.category;
+			p.push('ProductSearch[category_id]=' + filter.category);
 		}
+		if (filter.characteristics) {
+			for (let f of filter.characteristics) {
+				p.push('ProductSearch[character][' + f.id + ']=' + f.value);
+			}
+		}
+		
+		p.forEach( (v, i) => {
+			if (i == 0) {
+				url += '?' + v;
+			} else {
+				url += '&' + v;
+			}
+		});
+
 		let headers = new Headers();
 		let requestOptions = new RequestOptions();
 		requestOptions.headers = headers;

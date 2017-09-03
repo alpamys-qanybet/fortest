@@ -79,6 +79,6 @@ export class SubcategoryPage {
 
 	dismiss() {
 		let firstViewCtrl = this.navCtrl.first();
-		this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss({submitted: true}));	
+		this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss({submitted: true}));
 	}
 }

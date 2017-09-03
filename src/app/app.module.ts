@@ -15,6 +15,7 @@ import { HomePage } from '../pages/home/home';
 import { CategoryPage } from '../pages/category/category';
 import { SubcategoryPage } from '../pages/category/subcategory';
 import { FilterPage } from '../pages/filter/filter';
+import { CharacteristicsPage } from '../pages/filter/characteristics';
 import { LocationPage } from '../pages/location/location';
 import { SublocationPage } from '../pages/location/sublocation';
 import { FavouritePage } from '../pages/favourite/favourite';
@@ -33,6 +34,7 @@ import { Keyboard } from '@ionic-native/keyboard';
     CategoryPage,
     SubcategoryPage,
     FilterPage,
+    CharacteristicsPage,
     LocationPage,
     SublocationPage,
     FavouritePage,
@@ -54,6 +56,7 @@ import { Keyboard } from '@ionic-native/keyboard';
     CategoryPage,
     SubcategoryPage,
     FilterPage,
+    CharacteristicsPage,
     LocationPage,
     SublocationPage,
     FavouritePage,

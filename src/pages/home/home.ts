@@ -44,6 +44,11 @@ export class HomePage {
 
 		this.init();
 		this.global.categoryChange.subscribe((data) => {
+			this.global.removeFilterCharacteristics();
+			this.init();
+		});
+
+		this.global.filterChange.subscribe((data) => {
 			this.init();
 		});
 	}
@@ -72,6 +77,17 @@ export class HomePage {
 			this.categoryPath = category.path;
 		} else {
 			this.categoryPath = [];
+		}
+
+		let f = this.global.getFilter();
+		if (f.has('characteristics')) {
+			filter.characteristics = [];
+			for (let v of f.get('characteristics')) {
+				filter.characteristics.push( {
+					id: v.character_id,
+					value: v.id
+				});
+			}
 		}
 
 		this.api.fetchProducts(this.productPage, filter, (response) => {
@@ -181,7 +197,7 @@ export class HomePage {
 		let filterModal = this.modalCtrl.create(FilterPage);
 		filterModal.onDidDismiss(data => {
 			if (data.submitted) {
-				// this.global.toggleCategory();
+				this.global.toggleFilter();
 			}
 		});
 		filterModal.present();
