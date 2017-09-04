@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { 
 	NavController,
 	Loading,
 	LoadingController,
+	Content,
 	ModalController,
 	MenuController
 } from 'ionic-angular';
@@ -20,6 +21,12 @@ import { FilterPage } from '../filter/filter';
 	templateUrl: 'home.html'
 })
 export class HomePage {
+	@ViewChild('contentRef') contentHandle: Content;
+
+	private tabBarHeight;
+	private headerHeight;
+	private contentBox;
+
 	public loading:Loading;
 	host: string;
 
@@ -245,5 +252,32 @@ export class HomePage {
 
 	openProduct(item) {
 
+	}
+
+	ionViewDidEnter() {
+		this.contentBox = document.querySelector('.scroll-content')['style'];
+		this.headerHeight = this.contentBox.marginTop;
+		this.tabBarHeight = this.contentBox.marginBottom;
+	}
+
+	scrollingFun(e) {
+		if (e.directionY == 'up') {
+			document.querySelector('.e-shopper-scroll-header')['style'].display = 'block';
+			document.querySelector(".tabbar")['style'].display = 'flex';
+
+			this.contentBox.marginTop = this.headerHeight;
+			this.contentBox.marginBottom = this.tabBarHeight;
+			document.querySelector(".scroll-content")['style'].marginTop = this.headerHeight;
+			document.querySelector(".scroll-content")['style'].marginBottom = this.tabBarHeight;
+		
+		} else if (e.directionY == 'down') {
+			document.querySelector('.e-shopper-scroll-header')['style'].display = 'none';
+			document.querySelector(".tabbar")['style'].display = 'none';
+
+			this.contentBox.marginTop = 0;
+			this.contentBox.marginBottom = 0;
+			document.querySelector(".scroll-content")['style'].marginTop = 0;
+			document.querySelector(".scroll-content")['style'].marginBottom = 0;
+		}
 	}
 }
