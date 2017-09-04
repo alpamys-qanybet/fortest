@@ -258,26 +258,49 @@ export class HomePage {
 		this.contentBox = document.querySelector('.scroll-content')['style'];
 		this.headerHeight = this.contentBox.marginTop;
 		this.tabBarHeight = this.contentBox.marginBottom;
+		//document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';
+		//document.querySelector(".scroll-content")['style'].zIndex = '1000';
+		
+		//document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';
+		//document.querySelector(".e-shopper-scroll-header")['style'].transition = 'opacity 0.5s linear';
 	}
 
 	scrollingFun(e) {
-		if (e.directionY == 'up') {
-			document.querySelector('.e-shopper-scroll-header')['style'].display = 'block';
-			document.querySelector(".tabbar")['style'].display = 'flex';
+		// if (e.scrollTop > this.contentHandle.getContentDimensions().contentHeight) {
+		// if (e.scrollTop > (this.contentHandle.getContentDimensions().contentHeight/3)) {
+		if (e.directionY == 'down' && e.scrollTop > 60) {
+			//document.querySelector('.e-shopper-scroll-header')['style'].opacity = 0;
+			//document.querySelector(".e-shopper-scroll-header")['style'].transition = 'opacity 0.4s linear';
+			document.querySelector(".e-shopper-scroll-header")['style'].top = '-'+this.headerHeight;
+			document.querySelector(".e-shopper-scroll-header")['style'].transition = 'top 0.4s linear';
 
-			this.contentBox.marginTop = this.headerHeight;
-			this.contentBox.marginBottom = this.tabBarHeight;
-			document.querySelector(".scroll-content")['style'].marginTop = this.headerHeight;
-			document.querySelector(".scroll-content")['style'].marginBottom = this.tabBarHeight;
-		
-		} else if (e.directionY == 'down') {
-			document.querySelector('.e-shopper-scroll-header')['style'].display = 'none';
-			document.querySelector(".tabbar")['style'].display = 'none';
+			//document.querySelector(".tabbar")['style'].opacity = 0;
+			//document.querySelector(".tabbar")['style'].transition = 'opacity 0.4s linear';
+			document.querySelector(".tabbar")['style'].bottom = '-'+this.tabBarHeight; //'-40px';
+			document.querySelector(".tabbar")['style'].transition = 'bottom 0.4s linear';
 
 			this.contentBox.marginTop = 0;
 			this.contentBox.marginBottom = 0;
 			document.querySelector(".scroll-content")['style'].marginTop = 0;
 			document.querySelector(".scroll-content")['style'].marginBottom = 0;
+			document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';
+		} 
+		if (e.directionY == 'up' && e.scrollTop < 30) {
+			//document.querySelector('.e-shopper-scroll-header')['style'].opacity = 1;
+			//document.querySelector(".e-shopper-scroll-header")['style'].transition = 'opacity 0.4s linear';
+			document.querySelector(".e-shopper-scroll-header")['style'].top = 0;
+			document.querySelector(".e-shopper-scroll-header")['style'].transition = 'top 0.4s linear';
+			
+			//document.querySelector(".tabbar")['style'].opacity = 1;
+			//document.querySelector(".tabbar")['style'].transition = 'opacity 0.4s linear';
+			document.querySelector(".tabbar")['style'].bottom = 0;
+			document.querySelector(".tabbar")['style'].transition = 'bottom 0.4s linear';
+
+			this.contentBox.marginTop = this.headerHeight;
+			this.contentBox.marginBottom = this.tabBarHeight;
+			document.querySelector(".scroll-content")['style'].marginTop = this.headerHeight;
+			document.querySelector(".scroll-content")['style'].marginBottom = this.tabBarHeight;
+			document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';	
 		}
 	}
 }
