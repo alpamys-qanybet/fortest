@@ -25,6 +25,16 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Keyboard } from '@ionic-native/keyboard';
 
+import { ElasticHeaderModule } from "ionic2-elastic-header/dist";
+
+import { ShrinkingSegmentHeaderComponent } from '../components/shrinking-segment-header/shrinking-segment-header';
+import { ExpandableHeaderComponent } from '../components/expandable-header/expandable-header';
+
+import { ShrinkHeader } from '../components/shrink-header/shrink-header';
+import { IonShrinkingHeader } from '../components/ion-shrinking-header';
+
+
+
 @NgModule({
   declarations: [
     MyApp,
@@ -38,11 +48,16 @@ import { Keyboard } from '@ionic-native/keyboard';
     LocationPage,
     SublocationPage,
     FavouritePage,
-    TabsPage
+    TabsPage,
+    ShrinkingSegmentHeaderComponent,
+    ExpandableHeaderComponent,
+    ShrinkHeader,
+    IonShrinkingHeader
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    ElasticHeaderModule,
     IonicModule.forRoot(MyApp, {
       iconMode: 'ios',
 //    menuType: 'reveal',

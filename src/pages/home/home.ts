@@ -21,12 +21,8 @@ import { FilterPage } from '../filter/filter';
 	templateUrl: 'home.html'
 })
 export class HomePage {
-	@ViewChild('contentRef') contentHandle: Content;
-
-	private tabBarHeight;
-	private headerHeight;
-	private contentBox;
-
+	@ViewChild(Content) content: Content;
+	
 	public loading:Loading;
 	host: string;
 
@@ -41,6 +37,10 @@ export class HomePage {
 	
 	searchInput: string = '';
 
+	wkwebviewTest: string = '';
+	somethings: any = new Array(20);
+
+
 	constructor(
 		public navCtrl: NavController,
 		private loadingCtrl: LoadingController,
@@ -50,6 +50,14 @@ export class HomePage {
 		private keyboard: Keyboard,
 		private global: GlobalService
 	) {
+		if (window.indexedDB) {
+			console.log("I'm in WKWebView!");
+			this.wkwebviewTest = "I'm in WKWebView!";
+		} else {
+			console.log("I'm in UIWebView");
+			this.wkwebviewTest = "I'm in UIWebView!";
+		}
+
 		this.pagination = [];
 		this.host = this.global.getHost();
 
@@ -252,86 +260,5 @@ export class HomePage {
 
 	openProduct(item) {
 
-	}
-
-	ionViewDidEnter() {
-		this.contentBox = document.querySelector('.scroll-content')['style'];
-		this.headerHeight = this.contentBox.marginTop;
-		this.tabBarHeight = this.contentBox.marginBottom;
-		//document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';
-		//document.querySelector(".scroll-content")['style'].zIndex = '1000';
-		
-		//document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';
-		//document.querySelector(".e-shopper-scroll-header")['style'].transition = 'opacity 0.5s linear';
-
-		document.querySelector(".e-shopper-scroll-header")['style'].transition = 'opacity 0.6s linear, top 1.3s ease';
-		document.querySelector(".tabbar")['style'].transition = 'opacity 0.6s linear, bottom 1.3s ease';
-		
-		document.querySelector(".scroll-content")['style'].transition = 'margin-top 1.8s ease';
-		document.querySelector(".scroll-content")['style'].transition = 'margin-bottom 1.8s ease';
-	}
-
-/*
-	scrollingFun(e) {
-		// if (e.scrollTop > this.contentHandle.getContentDimensions().contentHeight) {
-		// if (e.scrollTop > (this.contentHandle.getContentDimensions().contentHeight/3)) {
-		if (e.directionY == 'down' && e.scrollTop > 60) {
-			//document.querySelector('.e-shopper-scroll-header')['style'].opacity = 0;
-			//document.querySelector(".e-shopper-scroll-header")['style'].transition = 'opacity 0.4s linear';
-			document.querySelector(".e-shopper-scroll-header")['style'].top = '-'+this.headerHeight;
-			document.querySelector(".e-shopper-scroll-header")['style'].transition = 'top 0.4s ease';
-
-			//document.querySelector(".tabbar")['style'].opacity = 0;
-			//document.querySelector(".tabbar")['style'].transition = 'opacity 0.4s linear';
-			document.querySelector(".tabbar")['style'].bottom = '-'+this.tabBarHeight; //'-40px';
-			document.querySelector(".tabbar")['style'].transition = 'bottom 0.4s linear';
-
-			this.contentBox.marginTop = 0;
-			this.contentBox.marginBottom = 0;
-			document.querySelector(".scroll-content")['style'].marginTop = 0;
-			document.querySelector(".scroll-content")['style'].marginBottom = 0;
-			//document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';
-		} 
-		if (e.directionY == 'up' && e.scrollTop < 10) {
-			//document.querySelector('.e-shopper-scroll-header')['style'].opacity = 1;
-			//document.querySelector(".e-shopper-scroll-header")['style'].transition = 'opacity 0.4s linear';
-			document.querySelector(".e-shopper-scroll-header")['style'].top = 0;
-			document.querySelector(".e-shopper-scroll-header")['style'].transition = 'top 0.4s linear';
-			
-			//document.querySelector(".tabbar")['style'].opacity = 1;
-			//document.querySelector(".tabbar")['style'].transition = 'opacity 0.4s linear';
-			document.querySelector(".tabbar")['style'].bottom = 0;
-			document.querySelector(".tabbar")['style'].transition = 'bottom 0.4s linear';
-
-			this.contentBox.marginTop = this.headerHeight;
-			this.contentBox.marginBottom = this.tabBarHeight;
-			document.querySelector(".scroll-content")['style'].marginTop = this.headerHeight;
-			document.querySelector(".scroll-content")['style'].marginBottom = this.tabBarHeight;
-			//document.querySelector(".scroll-content")['style'].transition = 'margin 0.4s linear';	
-		}
-	}
-*/
-	
-	scrollingFun(e) {
-		if (e.scrollTop > 60) {
-			document.querySelector('.e-shopper-scroll-header')['style'].opacity = 0.4;
-			document.querySelector(".e-shopper-scroll-header")['style'].top = '-'+this.headerHeight;
-	
-			document.querySelector(".tabbar")['style'].opacity = 0.4;
-			document.querySelector(".tabbar")['style'].bottom = '-'+this.tabBarHeight;
-			
-			document.querySelector(".scroll-content")['style'].marginTop = 0;
-			document.querySelector(".scroll-content")['style'].marginBottom = 0;
-		} else {
-			document.querySelector('.e-shopper-scroll-header')['style'].opacity = 1;
-			document.querySelector(".e-shopper-scroll-header")['style'].top = 0;
-			
-			document.querySelector(".tabbar")['style'].opacity = 1;
-			document.querySelector(".tabbar")['style'].bottom = 0;
-			
-			document.querySelector(".scroll-content")['style'].marginTop = this.headerHeight;
-			document.querySelector(".scroll-content")['style'].marginBottom = this.tabBarHeight;
-			//document.querySelector(".scroll-content")['style'].transition = 'margin 0.7s linear';	
-		}
 	}
 }

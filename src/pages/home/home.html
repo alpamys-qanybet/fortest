@@ -1,4 +1,4 @@
-<ion-header class='e-shopper-scroll-header'>
+<ion-header [ion-shrinking-header]="content">
 	<ion-toolbar color="primary">
 		<ion-buttons left>
 			<button ion-button icon-only (click)="openCategories($event)">
@@ -24,11 +24,16 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content #contentRef (ionScroll)="scrollingFun($event)">
-	<span *ngFor="let category of categoryPath">
-		{{category.name}},
-	</span>
-
+<ion-content>
+	<ion-list>
+		<ion-item *ngFor="let something of somethings">
+			<ion-thumbnail item-left>
+				<img src="https://avatars.io/instagram/unknown">
+			</ion-thumbnail>
+			<h2>Something</h2>
+		</ion-item>
+	</ion-list>
+	
 	<div [ngSwitch]="mode">
 		<ion-refresher (ionRefresh)="doRefreshProduct($event)">
 			<ion-refresher-content></ion-refresher-content>
