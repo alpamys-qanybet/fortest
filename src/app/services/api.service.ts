@@ -98,6 +98,7 @@ export class ApiService {
 */
 	fetchProducts(page, filter, fn, fnErr) {
 		let url = this.baseUrl + '/product';
+		
 		let p = [];
 		if (filter.category) {
 			p.push('ProductSearch[category_id]=' + filter.category);
@@ -123,7 +124,7 @@ export class ApiService {
 		let params: URLSearchParams = new URLSearchParams();
 		params.set('page', page);
 		requestOptions.search = params;
-
+/*
 		this.http.get(url, requestOptions)
 		.timeout(this.timeoutSequence)
 		.map( response => {
@@ -137,6 +138,14 @@ export class ApiService {
 				}
 			}
 		}).subscribe(data => {
+			fn(data);
+		}, (err)=> {
+			fnErr(err);
+		});
+*/
+		this.http.get(url, requestOptions)
+		.timeout(this.timeoutSequence)
+		.map( response => this.mock.fetchProducts(page)).subscribe(data => {
 			fn(data);
 		}, (err)=> {
 			fnErr(err);

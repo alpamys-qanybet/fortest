@@ -31,8 +31,9 @@ export class HomePage {
 	productIsMoreAvailable: boolean = false;
 	productPage: number = 1;
 	productList = [];
+	productFetchAlreadyInProcess: boolean = false;
 
-	mode: string = 'grid'; // 'grid', 'list'
+	mode: string = 'list'; // 'grid', 'list'
 	pagination: any = [];
 	
 	searchInput: string = '';
@@ -118,6 +119,11 @@ export class HomePage {
 	}
 
 	processProduct(onInit, fn, fnErr) {
+		if (this.productFetchAlreadyInProcess) {
+			fnErr(); // ? fn();
+			return;
+		}
+		this.productFetchAlreadyInProcess = true;
 		if (onInit) {
 			this.productPage = 1;
 			this.productList = [];
@@ -144,14 +150,22 @@ export class HomePage {
 		}
 
 		this.api.fetchProducts(this.productPage, filter, (response) => {
-			let list = response.response.data;
 			this.productIsMoreAvailable = response.info.currentPage < response.info.pageCount;
 			this.productPage++;
-			this.productList = this.productList.concat(list);
+			
+			let list = response.response.data;
+			if (list.length > 0) {
+				this.productList = this.productList.concat(list);
 
+				this.productFetchAlreadyInProcess = false;
+				this.content.resize();
+			}
 			this.paginate(this.productList, 'grid', 2);
+			
 			fn();
 		}, (err) => {
+			this.productFetchAlreadyInProcess = false;
+
 			fnErr();
 		});
 	}
@@ -159,8 +173,10 @@ export class HomePage {
 	doRefreshProduct(refresher) {
 		this.processProduct(true, ()=> {
 			refresher.complete();
+			// this.content.resize();
 		}, ()=> {
 			refresher.complete();
+			//this.content.resize();
 		});
 	}
 
@@ -168,13 +184,41 @@ export class HomePage {
 		if (this.productIsMoreAvailable) {
 			this.processProduct(false, ()=> {
 				infiniteScroll.complete();
+				// this.content.resize();
 			}, ()=> {
 				infiniteScroll.complete();
+				//this.content.resize();
 			});
 		}
 		else {
 			infiniteScroll.complete();
+			// this.content.resize();
 		}
+	}
+
+	doInfiniteProductPromise(infiniteScroll:any): Promise<any> {
+		console.log('Begin async operation');
+
+		return new Promise((resolve) => {
+			if (this.productIsMoreAvailable) {
+				this.processProduct(false, ()=> {
+					infiniteScroll.complete();
+					// this.content.resize();
+					console.log('Async operation has ended');
+					resolve();
+				}, ()=> {
+					infiniteScroll.complete();
+					// this.content.resize();
+					console.log('Async operation has ended');
+					resolve();
+				});
+			}
+			else {
+				infiniteScroll.complete();
+				// this.content.resize();
+				resolve();
+			}
+		});
 	}
 
 /*

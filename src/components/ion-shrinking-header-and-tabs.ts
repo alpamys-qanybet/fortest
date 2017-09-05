@@ -2,19 +2,21 @@ import { Directive, ElementRef, Renderer, Input } from '@angular/core';
 import { Content, Platform } from 'ionic-angular';
 
 @Directive({
-  selector: '[ion-shrinking-header]',
+  selector: '[ion-shrinking-header-and-tabs]',
 })
-export class IonShrinkingHeader {
+export class IonShrinkingHeaderAndTabs {
 
   // content is required to get scroll information
-  @Input('ion-shrinking-header') content: Content;
+  @Input('ion-shrinking-header-and-tabs') content: Content;
 
   // internals
   private ionHeaderElement: HTMLElement;
   private toolbarElement: HTMLElement;
+  private ionTabsElement: any; //HTMLElement;
   private ionContentElement: HTMLElement;
   private onContentScrollUnbind: Function;
   private headerHeight: number;
+  private tabHeight: number;
   private lastScrollTop: number = 0;
   private shrinkAmount: number = 0;
   private ticking: boolean = false;
@@ -26,20 +28,29 @@ export class IonShrinkingHeader {
 
   ngOnInit() {
     if (this.content === undefined || this.content === null) {
-      console.error('IonShrinkingHeader - content is not defined.');
+      console.error('IonShrinkingHeaderAndTabs - content is not defined.');
       return;
     }
     this.headerHeight = this.ionHeaderElement.offsetHeight;
     // retrieves the different elements
     this.toolbarElement = this.queryElement(this.ionHeaderElement, '.toolbar');
     if (!this.toolbarElement) {
-      console.error('IonShrinkingHeader - no ion-navbar element found.');
+      console.error('IonShrinkingHeaderAndTabs - no ion-navbar element found.');
       return;
     }
     // retrieves the different elements
+    // this.ionTabsElement = this.queryElement(this.ionHeaderElement.parentElement.parentElement, '.tabbar');
+    this.ionTabsElement = document.querySelector(".tabbar");
+    if (!this.ionTabsElement) {
+      console.error('IonShrinkingHeaderAndTabs - no tabs element found.');
+      return;
+    }
+    this.tabHeight = this.ionTabsElement.offsetHeight;
+    
+    // retrieves the different elements
     this.ionContentElement = this.queryElement(this.ionHeaderElement.parentElement, '.scroll-content');
     if (!this.ionContentElement) {
-      console.error('IonShrinkingHeader - no .scroll-content element found. Scroll must be enabled on your ion-content.');
+      console.error('IonShrinkingHeaderAndTabs - no .scroll-content element found. Scroll must be enabled on your ion-content.');
       return;
     }
 
@@ -50,7 +61,7 @@ export class IonShrinkingHeader {
 
   onContentScroll(e: any): void {
     let scrollTop = e.detail ? e.detail.scrollTop : (e.target ? e.target.scrollTop : 0);
-    
+
     // add boundaries to scrollTop to support iOS bouncing scroll
     if (scrollTop < 0) {
       scrollTop = 0;
@@ -58,7 +69,7 @@ export class IonShrinkingHeader {
     if (scrollTop > this.content.scrollHeight + this.content.contentHeight + this.headerHeight + this.iOSStatusBarHeight) {
       scrollTop = this.content.scrollHeight + this.content.contentHeight + this.headerHeight + this.iOSStatusBarHeight;
     }
-    
+
     if (scrollTop > this.lastScrollTop) { //scrolling down
       this.shrinkAmount = 
         this.headerHeight 
@@ -67,6 +78,7 @@ export class IonShrinkingHeader {
           - this.shrinkAmount 
           - (scrollTop - this.lastScrollTop)
         );
+
     } else { //scrolling up
       this.shrinkAmount = 
         Math.max(0, 
@@ -74,15 +86,26 @@ export class IonShrinkingHeader {
           - (this.headerHeight - this.shrinkAmount) 
           - (this.lastScrollTop - scrollTop)
         );
+
     }
 
     if(!this.ticking){
       window.requestAnimationFrame(() => {
         let amount = Math.min(this.headerHeight, this.shrinkAmount);
+        
         // update the margin top of the content element
         this.ionContentElement.style.marginTop = (this.headerHeight - amount + (this.isIos() ? this.iOSStatusBarHeight : 0)) + 'px';
+
         // move the header bar
         this.ionHeaderElement.style.webkitTransform = 'translate3d(0, -' + amount + 'px, 0)';
+        
+        // update the margin bottom of the content element
+        this.ionContentElement.style.marginBottom = (this.tabHeight - amount) + 'px';
+        
+        // move the tabs
+        // this.ionTabsElement.style.webkitTransform = 'translate3d(0, ' + amount + 'px, 0)';
+        this.ionTabsElement['style'].webkitTransform = 'translate3d(0, ' + amount + 'px, 0)';
+        
         // update header elements opacity
         for(var i = 0; i < this.toolbarElement.children.length; i++) {
           let elem : HTMLElement = <HTMLElement> this.toolbarElement.children[i];
@@ -90,6 +113,11 @@ export class IonShrinkingHeader {
             elem.style.opacity = (1 - this.shrinkAmount / this.headerHeight).toString();
           }
         }
+
+        // update tabs opacity 
+        // ?TODO: check if needed thus works with toolbar-background
+        // this.ionTabsElement.style.opacity = (1 - this.shrinkAmount / this.headerHeight).toString()
+        
         this.ticking = false;
       });
     }

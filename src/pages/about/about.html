@@ -8,10 +8,8 @@
 		</ion-buttons>
 	</ion-navbar>
 
-	<shrinking-segment-header [scrollArea]="aboutScrollContent" headerHeight="150">
-		<img src="https://avatars.io/instagram/pathmoretravelled" />
-		<h2>Josh</h2>
-	</shrinking-segment-header>
+	<img src="https://avatars.io/instagram/pathmoretravelled" />
+	<h2>Josh</h2>
 
 	<ion-toolbar color="light" mode="md">
 		<ion-segment color="dark" mode="md" [(ngModel)]="section">
@@ -28,7 +26,7 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content fullscreen #aboutScrollContent>
+<ion-content>
 	<div [ngSwitch]="section">
 		<ion-list *ngSwitchCase="'one'">
 			<ion-item *ngFor="let something of somethings">

@@ -9,6 +9,12 @@ import { GlobalService } from './services/global.service';
 import { ApiService } from './services/api.service';
 import { MockService } from './services/mock.service';
 
+// import { DatePipe } from './pipes/date.pipe';
+import { ConcatPipe } from './pipes/concat.pipe';
+import { MonthtextPipe } from './pipes/monthtext.pipe';
+import { TimeAgoPipe } from './pipes/timeago.pipe';
+
+
 import { AboutPage } from '../pages/about/about';
 import { ContactPage } from '../pages/contact/contact';
 import { HomePage } from '../pages/home/home';
@@ -25,19 +31,16 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Keyboard } from '@ionic-native/keyboard';
 
-import { ElasticHeaderModule } from "ionic2-elastic-header/dist";
-
-import { ShrinkingSegmentHeaderComponent } from '../components/shrinking-segment-header/shrinking-segment-header';
-import { ExpandableHeaderComponent } from '../components/expandable-header/expandable-header';
-
-import { ShrinkHeader } from '../components/shrink-header/shrink-header';
 import { IonShrinkingHeader } from '../components/ion-shrinking-header';
-
-
+import { IonShrinkingHeaderAndTabs } from '../components/ion-shrinking-header-and-tabs';
 
 @NgModule({
   declarations: [
     MyApp,
+    // DatePipe,
+    ConcatPipe,
+    MonthtextPipe,
+    TimeAgoPipe,
     AboutPage,
     ContactPage,
     HomePage,
@@ -49,15 +52,12 @@ import { IonShrinkingHeader } from '../components/ion-shrinking-header';
     SublocationPage,
     FavouritePage,
     TabsPage,
-    ShrinkingSegmentHeaderComponent,
-    ExpandableHeaderComponent,
-    ShrinkHeader,
-    IonShrinkingHeader
+    IonShrinkingHeader,
+    IonShrinkingHeaderAndTabs
   ],
   imports: [
     BrowserModule,
     HttpModule,
-    ElasticHeaderModule,
     IonicModule.forRoot(MyApp, {
       iconMode: 'ios',
 //    menuType: 'reveal',
