@@ -6,6 +6,7 @@ import {
 	LoadingController,
 	MenuController
 } from 'ionic-angular';
+
 import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
 
@@ -14,9 +15,10 @@ import { GlobalService } from '../../app/services/global.service';
 	templateUrl: 'sublocation.html'
 })
 export class SublocationPage {
+
+	isModal: boolean;
 	selectedItem: any;
 	locationList: Array<{any}>;
-	isModal: boolean;
 
 	constructor(
 		public menuCtrl: MenuController,
@@ -67,7 +69,7 @@ export class SublocationPage {
 	dismiss() {
 		if (this.isModal) {
 			let firstViewCtrl = this.navCtrl.first();
-			this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss());
+			this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss({submitted: true}));
 		}
 		else {
 			this.navCtrl.popToRoot({animate: false});

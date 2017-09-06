@@ -16,9 +16,10 @@ import { SublocationPage } from './sublocation';
 	templateUrl: 'location.html'
 })
 export class LocationPage {
-	locationList: Array<{any}>;
+	
 	isModal: boolean;
-
+	locationList: Array<{any}>;
+	
 	constructor(
 		public navCtrl: NavController,
 		public navParams: NavParams,

@@ -11,6 +11,7 @@ import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
 
 import { CharacteristicsPage } from './characteristics';
+import { CategoryPage } from '../category/category';
 import { LocationPage } from '../location/location';
 
 @Component({
@@ -22,6 +23,7 @@ export class FilterPage {
 	location: any;
 	locationObserver: any;
 	category: any;
+	categoryObserver: any;
 	characteristics: Array<{any}> = [];
 	characteristicsObserver: any;
 	characteristicsFilter = new Map<number, any>(); // : Map<number, any>
@@ -48,28 +50,15 @@ export class FilterPage {
 			this.reloadLocationValues();
 		});
 
-		let category = this.global.getCategory();
-		if (category) {
-			this.api.fetchCategory(category.item.id, (response) => {
-				this.characteristics = response.data.characteristics;
-
-				this.characteristicsFilter.clear();
-				if (f.has('characteristics')) {
-					for (let v of f.get('characteristics')) {
-						this.characteristicsFilter.set(v.character_id, v);
-						this.global.setCharacter(v);
-					}
-				}
-
-				this.characteristicsObserver = this.global.characteristicsChange.subscribe((data) => {
-					this.filterHasChange = true;
-					this.reloadCharacteristicsValues();
-				});
-			}, (err) => {
-			});
+		if (f.has('category')) {
+			this.global.setCategory(f.get('category'));
 		}
-		this.category = category;
-		console.log(this.category);	
+		this.category = this.global.getCategory();
+		this.reloadCategoryValues(false);
+		this.categoryObserver = this.global.categoryChange.subscribe((data) => {
+			this.filterHasChange = true;
+			this.reloadCategoryValues(true);
+		});
 	}
 
 	priceFromChanged(event) {
@@ -107,6 +96,36 @@ export class FilterPage {
 		this.location = this.global.getLocation();
 	}
 
+	reloadCategoryValues(changed) {
+		this.category = this.global.getCategory();
+
+		if (this.category) {
+			this.api.fetchCategory(this.category.item.id, (response) => {
+				this.characteristics = response.data.characteristics;
+				this.characteristicsFilter.clear();
+
+				if (changed) {
+					this.global.clearCharacteristics();
+				} else {
+					let f = this.global.getFilter();
+
+					if (f.has('characteristics')) {
+						for (let v of f.get('characteristics')) {
+							this.characteristicsFilter.set(v.character_id, v);
+							this.global.setCharacter(v);
+						}
+					}
+				}
+
+				this.characteristicsObserver = this.global.characteristicsChange.subscribe((data) => {
+					this.filterHasChange = true;
+					this.reloadCharacteristicsValues();
+				});
+			}, (err) => {
+			});
+		}
+	}
+
 	reloadCharacteristicsValues() {
 		this.characteristicsFilter.clear();
 		this.global.getCharacteristics().forEach ((v,k) => {
@@ -121,6 +140,9 @@ export class FilterPage {
 		if (this.locationObserver) {
 			this.locationObserver.unsubscribe();
 		}
+		if (this.categoryObserver) {
+			this.categoryObserver.unsubscribe();
+		}
 		if (this.characteristicsObserver) {
 			this.characteristicsObserver.unsubscribe();
 		}
@@ -130,6 +152,7 @@ export class FilterPage {
 		this.viewCtrl.dismiss({submitted: true});
 
 		this.global.setFilterLocation();
+		this.global.setFilterCategory();
 //		this.global.setFilterCharacteristics(this.global.getCharacteristics());
 //		this.global.clearCharacteristics();
 		this.global.setFilterCharacteristics();
@@ -143,16 +166,7 @@ export class FilterPage {
 	}
 
 	openCategories() {
-		console.log('openCategories');
-/*
-		let selectCategoryModal = this.modalCtrl.create(CategoryPage);
-		selectCategoryModal.onDidDismiss(data => {
-			if (data.submitted) {
-				this.global.toggleCategory();
-			}
-		});
-		selectCategoryModal.present();
-*/
+		this.navCtrl.push(CategoryPage);
 	}
 
 	openLocation() {

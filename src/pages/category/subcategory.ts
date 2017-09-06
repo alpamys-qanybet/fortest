@@ -5,6 +5,7 @@ import {
 	NavParams,
 	LoadingController
 } from 'ionic-angular';
+
 import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
 
@@ -13,6 +14,8 @@ import { GlobalService } from '../../app/services/global.service';
 	templateUrl: 'subcategory.html'
 })
 export class SubcategoryPage {
+	
+	isModal: boolean;
 	selectedItem: any;
 	path: Array<{any}>;
 	categoryList: Array<{any}>;
@@ -25,6 +28,7 @@ export class SubcategoryPage {
 		private api: ApiService,
 		private global: GlobalService
 	) {
+		this.isModal = navParams.get('isModal');
 		this.selectedItem = navParams.get('item');
 		this.path = navParams.get('path');
 		this.current = navParams.get('current');
@@ -78,7 +82,12 @@ export class SubcategoryPage {
 	}
 
 	dismiss() {
-		let firstViewCtrl = this.navCtrl.first();
-		this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss({submitted: true}));
+		if (this.isModal) {
+			let firstViewCtrl = this.navCtrl.first();
+			this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss({submitted: true}));
+		}
+		else {
+			this.navCtrl.popToRoot({animate: false});
+		}
 	}
 }

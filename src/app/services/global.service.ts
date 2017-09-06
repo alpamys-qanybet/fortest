@@ -143,6 +143,19 @@ export class GlobalService {
 		this.clearLocation();
 	}
 
+	setFilterCategory() {
+		let map = this.getFilter()
+		let category = this.getCategory();
+		if (category) {
+			map.set('category', category);
+		} else {
+			map.delete('category');
+		}
+		map.delete('characteristics');
+		this.setFilter(map);
+		this.clearCategory();
+	}
+
 /*
 	setFilterCharacteristics(data) {
 		let map = this.getFilter()
@@ -162,9 +175,11 @@ export class GlobalService {
 		}
 	}
 
+/*
 	removeFilterCharacteristics() {
 		let map = this.getFilter();
 		map.delete('characteristics');
 		this.setFilter(map);
 	}
+*/
 }

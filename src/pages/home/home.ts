@@ -64,10 +64,6 @@ export class HomePage {
 		this.host = this.global.getHost();
 
 		this.init();
-		this.global.categoryChange.subscribe((data) => {
-			this.global.removeFilterCharacteristics();
-			this.init();
-		});
 
 		this.global.filterChange.subscribe((data) => {
 			this.init();
@@ -131,16 +127,15 @@ export class HomePage {
 		}
 
 		let filter: any = {};
-
 		let f = this.global.getFilter();
+
 		if (f.has('location')) {
 			filter.location = f.get('location').id;
 		}
-		
-		let category = this.global.getCategory();
-		if (category) {
-			filter.category = category.item.id;
-			this.categoryPath = category.path;
+
+		if (f.has('category')) {
+			filter.category = f.get('category').item.id;
+			this.categoryPath = f.get('category').path;
 		} else {
 			this.categoryPath = [];
 		}
@@ -291,10 +286,13 @@ export class HomePage {
 
 	openCategories(event) {
 		// let selectCategoryModal = this.modalCtrl.create(LocationPage);
-		let selectCategoryModal = this.modalCtrl.create(CategoryPage);
+		let selectCategoryModal = this.modalCtrl.create(CategoryPage, {
+			isModal: true
+		});
 		selectCategoryModal.onDidDismiss(data => {
 			if (data.submitted) {
-				this.global.toggleCategory();
+				this.global.setFilterCategory();
+				this.global.toggleFilter();
 			}
 		});
 		selectCategoryModal.present();

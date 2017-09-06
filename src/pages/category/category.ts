@@ -16,24 +16,32 @@ import { SubcategoryPage } from './subcategory';
 	templateUrl: 'category.html'
 })
 export class CategoryPage {
+	
+	isModal: boolean;
 	categoryList: Array<{any}>;
 	current: any;
 	rootInPath: any;
 
 	constructor(
 		public navCtrl: NavController,
+		public navParams: NavParams,
 		public viewCtrl: ViewController,
 		private api: ApiService,
 		private loadingCtrl: LoadingController,
 		private global: GlobalService
 	) {
-		let category = this.global.getCategory();
-		if (category) {
-			this.current = category.item.id;
-			this.rootInPath = category.path[0].id;
+		this.isModal = navParams.get('isModal');
+		
+		let f = this.global.getFilter();
+		
+		if (f.has('category')) {
+			this.current = f.get('category').item.id;
+			this.rootInPath = f.get('category').path[0].id;
 		}
+
 		let loader = this.loadingCtrl.create();
 		loader.present();
+		
 		this.api.fetchCategoryRoot((response) => {
 			let list = [];
 
@@ -58,10 +66,17 @@ export class CategoryPage {
 				item: item,
 				path: [item]
 			});
-			this.viewCtrl.dismiss({submitted: true});
+			
+			if (this.isModal) {
+				this.viewCtrl.dismiss({submitted: true});
+			}
+			else {
+				this.navCtrl.pop();
+			}
 		}
 		else {
 			this.navCtrl.push(SubcategoryPage, {
+				isModal: this.isModal,
 				item: item,
 				path: [item],
 				current: this.current
@@ -75,6 +90,11 @@ export class CategoryPage {
 	}
 
 	dismiss() {
-		this.viewCtrl.dismiss({submitted: false});
+		if (this.isModal) {
+			this.viewCtrl.dismiss({submitted: false});
+		}
+		else {
+			this.navCtrl.pop();
+		}
 	}
 }
