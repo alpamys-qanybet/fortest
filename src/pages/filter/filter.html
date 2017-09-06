@@ -2,7 +2,7 @@
 	<ion-toolbar>
 		<ion-buttons left>
 			<button ion-button (click)="dismiss()">
-				<ion-icon name="md-close" large></ion-icon>
+				<ion-icon name="md-close" class="lg-nav-icon"></ion-icon>
 			</button>
 		</ion-buttons>
 		<ion-title>Фильтр</ion-title>
@@ -15,7 +15,7 @@
 </ion-header>
 
 <ion-content>
-	<ion-list>
+	<ion-list no-lines>
 		<ion-item (click)="openCategories()">
 			<ion-thumbnail item-left>
 				<img *ngIf="!category" src="assets/category/png/all.png"/>
@@ -30,8 +30,8 @@
 		</ion-item>
 
 		<ion-item (click)="openLocation()">
-			<ion-thumbnail item-left>
-				<ion-icon name="pin-outline" large></ion-icon>
+			<ion-thumbnail class="icon-thumbnail" item-left>
+				<ion-icon name="pin-outline"></ion-icon>
 			</ion-thumbnail>
 			<h2>Изменить местоположение</h2>
 			<p *ngIf="!location">Не выбрано</p>
@@ -44,43 +44,48 @@
 			</p>
 		</ion-item>
 
-		<ion-row>
-			<ion-col col-2>
-				<ion-thumbnail item-left>
-					<ion-icon name="pricetags-outline" large></ion-icon>
-				</ion-thumbnail>
-			</ion-col>
-			<ion-col col-5>
-				<ion-input
-					type="tel"
-					[(ngModel)]="price.from"
-					placeholder="Мин"
-					(ionChange)="priceFromChanged($event)">
-				</ion-input>
-				<p>Цена от</p>
-			</ion-col>
-			<ion-col col-5>
-				<ion-input
-					type="tel"
-					[(ngModel)]="price.to"
-					placeholder="Макс"
-					(ionChange)="priceToChanged($event)">
-				</ion-input>
-				<p>Цена до</p>
-			</ion-col>
-		</ion-row>
+		<!-- <ion-item>			 -->
+			<ion-row style="border-bottom: 0.55px solid #c8c7cc !important; padding-bottom: 10px;">
+				<ion-col col-2 style="padding-top: 15px;">
+					<ion-thumbnail class="icon-thumbnail" item-left>
+						<ion-icon name="pricetags-outline"></ion-icon>
+					</ion-thumbnail>
+				</ion-col>
+				<ion-col col-5>
+					<ion-input
+						type="tel"
+						[(ngModel)]="price.from"
+						placeholder="Мин"
+						(ionChange)="priceFromChanged($event)">
+					</ion-input>
+					<p style="margin: 0; color: #545454;">Цена от</p>
+				</ion-col>
+				<ion-col col-5>
+					<ion-input
+						type="tel"
+						[(ngModel)]="price.to"
+						placeholder="Макс"
+						(ionChange)="priceToChanged($event)">
+					</ion-input>
+					<p style="margin: 0; color: #545454;">Цена до</p>
+				</ion-col>
+			</ion-row>
+		<!-- </ion-item> -->
 
-		<ion-item>
-			<ion-thumbnail item-left>
-				<ion-icon name="disc-outline" large></ion-icon>
+		<ion-item class="has-no-border" style="border: none !important;">
+			<ion-thumbnail class="icon-thumbnail" item-left>
+				<ion-icon name="disc-outline"></ion-icon>
 			</ion-thumbnail>
-			<ion-label>На расстоянии {{range}}км</ion-label>
-			<ion-range min="0" max="50" step="5"
+			<h2>На расстоянии {{range}}км</h2>
+			<p></p>
+		</ion-item>
+		<ion-item style="margin-top: -10px;">
+			<ion-range style="padding: 0;" min="1" max="50" step="5"
 				[(ngModel)]="range"
 				(ionChange)="rangeChanged($event)">
 			</ion-range>
 		</ion-item>
-		
+	
 		<ion-item *ngFor="let c of characteristics" (click)="openCharacteristics($event, c)">
 			<h2>{{c.name}}</h2>
 			<p item-right class="characteristics-value" *ngIf="!characteristicsFilter.has(c.id)">Все</p>

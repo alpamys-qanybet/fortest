@@ -1,8 +1,11 @@
 <ion-header>
 	<ion-toolbar>
 		<ion-buttons left>
-			<button ion-button (click)="dismiss()">
-				<ion-icon name="md-close" large></ion-icon>
+			<button ion-button *ngIf="isModal" (click)="dismiss()">
+				<ion-icon name="md-close" class="lg-nav-icon"></ion-icon>
+			</button>
+			<button ion-button *ngIf="!isModal" (click)="dismiss()">
+				<ion-icon name="ios-arrow-back" class="lg-nav-icon"></ion-icon>
 			</button>
 		</ion-buttons>
 		<ion-title>Категория</ion-title>

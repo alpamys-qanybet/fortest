@@ -1,5 +1,49 @@
 page-filter {
+	ion-content {
+		// background-color: color($colors, lightgrey, base) !important;
+	}
+
 	.characteristics-value {
 		padding-right: 2px;
+	}
+
+	ion-list {
+		
+		ion-item {
+
+			border-bottom: 0.55px solid #c8c7cc !important;
+
+			ion-thumbnail {
+				min-width: 38px !important;
+				min-height: 38px !important;
+
+				img {
+					width: 38px !important;
+					height: 38px !important;
+				}
+			}
+
+			ion-label {
+				font-size: 22px !important;
+				color: color($colors, qattysur, base);
+			}
+
+			ion-label.current {
+				color: color($colors, dark, base);
+			}
+		}
+	}
+
+	.icon-thumbnail {
+		text-align: center;
+
+		ion-icon {
+			font-size: 38px;
+			color: color($colors, qattysur, base);
+		}
+	}
+
+	.has-no-border {
+		border: none !important;
 	}
 }
