@@ -11,16 +11,20 @@ import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
 
 import { CharacteristicsPage } from './characteristics';
+import { LocationPage } from '../location/location';
 
 @Component({
 	selector: 'page-filter',
 	templateUrl: 'filter.html'
 })
 export class FilterPage {
-	characteristics: Array<{any}> = [];
-	characteristicsFilter = new Map<number, any>(); // : Map<number, any>
 	filterHasChange: boolean = false;
+	location: any;
+	locationObserver: any;
 	category: any;
+	characteristics: Array<{any}> = [];
+	characteristicsObserver: any;
+	characteristicsFilter = new Map<number, any>(); // : Map<number, any>
 	price: any = {
 		from: null,
 		to: null
@@ -33,13 +37,23 @@ export class FilterPage {
 		private api: ApiService,
 		private global: GlobalService
 	) {
+		let f = this.global.getFilter();
+		
+		if (f.has('location')) {
+			this.global.setLocation(f.get('location'));
+		}
+		this.location = this.global.getLocation();
+		this.locationObserver = this.global.locationChange.subscribe((data) => {
+			this.filterHasChange = true;
+			this.reloadLocationValues();
+		});
+
 		let category = this.global.getCategory();
 		if (category) {
 			this.api.fetchCategory(category.item.id, (response) => {
 				this.characteristics = response.data.characteristics;
 
 				this.characteristicsFilter.clear();
-				let f = this.global.getFilter();
 				if (f.has('characteristics')) {
 					for (let v of f.get('characteristics')) {
 						this.characteristicsFilter.set(v.character_id, v);
@@ -47,10 +61,10 @@ export class FilterPage {
 					}
 				}
 
-				this.global.characteristicsChange.subscribe((data) => {
+				this.characteristicsObserver = this.global.characteristicsChange.subscribe((data) => {
 					this.filterHasChange = true;
 					this.reloadCharacteristicsValues();
-				});	
+				});
 			}, (err) => {
 			});
 		}
@@ -89,6 +103,10 @@ export class FilterPage {
 	rangeChanged(event): void {
 	}
 
+	reloadLocationValues() {
+		this.location = this.global.getLocation();
+	}
+
 	reloadCharacteristicsValues() {
 		this.characteristicsFilter.clear();
 		this.global.getCharacteristics().forEach ((v,k) => {
@@ -99,10 +117,19 @@ export class FilterPage {
 	dismiss() {
 		this.global.clearCharacteristics();
 		this.viewCtrl.dismiss({submitted: false});
+
+		if (this.locationObserver) {
+			this.locationObserver.unsubscribe();
+		}
+		if (this.characteristicsObserver) {
+			this.characteristicsObserver.unsubscribe();
+		}
 	}
 
 	applyChanges() {
 		this.viewCtrl.dismiss({submitted: true});
+
+		this.global.setFilterLocation();
 //		this.global.setFilterCharacteristics(this.global.getCharacteristics());
 //		this.global.clearCharacteristics();
 		this.global.setFilterCharacteristics();
@@ -129,7 +156,7 @@ export class FilterPage {
 	}
 
 	openLocation() {
-		console.log('openLocation');
+		this.navCtrl.push(LocationPage);
 	}
 
 	resetAllFilters() {

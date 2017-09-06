@@ -17,14 +17,17 @@ import { SublocationPage } from './sublocation';
 })
 export class LocationPage {
 	locationList: Array<{any}>;
+	isModal: boolean;
 
 	constructor(
 		public navCtrl: NavController,
+		public navParams: NavParams,
 		public viewCtrl: ViewController,
 		private api: ApiService,
 		private loadingCtrl: LoadingController,
 		private global: GlobalService
 	) {
+		this.isModal = navParams.get('isModal');
 
 		let loader = this.loadingCtrl.create();
 		this.api.getLocationRoot().subscribe( response => {
@@ -36,18 +39,28 @@ export class LocationPage {
 	itemTapped(event, item) {
 		if (item.hasChildren == 0) {
 			this.global.setLocation(item);
-			// this.navCtrl.setRoot(ShopFilterPage);
-			// this.menuCtrl.close('right');
-			this.viewCtrl.dismiss({submitted: true});
+			
+			if (this.isModal) {
+				this.viewCtrl.dismiss({submitted: true});
+			}
+			else {
+				this.navCtrl.pop();
+			}
 		}
 		else {
 			this.navCtrl.push(SublocationPage, {
-				item: item
+				item: item,
+				isModal: this.isModal
 			});
 		}
 	}
 
 	dismiss() {
-		this.viewCtrl.dismiss({submitted: false});
+		if (this.isModal) {
+			this.viewCtrl.dismiss({submitted: false});
+		}
+		else {
+			this.navCtrl.pop();
+		}
 	}
 }

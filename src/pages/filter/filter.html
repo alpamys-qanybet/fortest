@@ -34,10 +34,13 @@
 				<ion-icon name="pin-outline" large></ion-icon>
 			</ion-thumbnail>
 			<h2>Изменить местоположение</h2>
-			<p *ngIf="!category">По всей стране</p>
-			<p *ngIf="category">
-				{{category.path[0].name}}
-				<span *ngIf="category.path[0].id != category.item.id"> - {{category.item.name}}</span>
+			<p *ngIf="!location">Не выбран</p>
+			<p *ngIf="location">
+<!--
+				{{location.path[0].title}}
+				<span *ngIf="location.path[0].id != location.item.id"> - {{location.item.title}}</span>
+-->
+				{{location.title}}
 			</p>
 		</ion-item>
 

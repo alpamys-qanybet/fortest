@@ -1,6 +1,11 @@
 import { Component } from '@angular/core';
 
-import { NavController, NavParams, LoadingController, MenuController } from 'ionic-angular';
+import {
+	NavController,
+	NavParams,
+	LoadingController,
+	MenuController
+} from 'ionic-angular';
 import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
 
@@ -11,6 +16,7 @@ import { GlobalService } from '../../app/services/global.service';
 export class SublocationPage {
 	selectedItem: any;
 	locationList: Array<{any}>;
+	isModal: boolean;
 
 	constructor(
 		public menuCtrl: MenuController,
@@ -21,6 +27,7 @@ export class SublocationPage {
 		private global: GlobalService
 	) {
 		this.selectedItem = navParams.get('item');
+		this.isModal = navParams.get('isModal');
 
 		let loader = this.loadingCtrl.create();
 		loader.present();
@@ -58,7 +65,12 @@ export class SublocationPage {
 	}
 
 	dismiss() {
-		let firstViewCtrl = this.navCtrl.first();
-		this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss());	
+		if (this.isModal) {
+			let firstViewCtrl = this.navCtrl.first();
+			this.navCtrl.popToRoot({animate: false}).then(() => firstViewCtrl.dismiss());
+		}
+		else {
+			this.navCtrl.popToRoot({animate: false});
+		}
 	}
 }

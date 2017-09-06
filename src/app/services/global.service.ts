@@ -11,6 +11,9 @@ export class GlobalService {
 	private host: string = 'https://auction.ofmoto.ru';
 	private defaultLocation = 1;
 
+	private locationObserver = new Subject<any>();
+	locationChange = this.locationObserver.asObservable();
+	
 	private categoryObserver = new Subject<any>();
 	categoryChange = this.categoryObserver.asObservable();
 
@@ -31,9 +34,11 @@ export class GlobalService {
 		return this.mockHost;
 	}
 
+/*	location	*/
 	setLocation(data:any) {
 		let json: string = JSON.stringify(data);
 		localStorage.setItem('location', json);
+		this.locationObserver.next();
 	}
 
 	getCurrentLocation() {
@@ -48,6 +53,12 @@ export class GlobalService {
 		return this.defaultLocation;
 	}
 
+	clearLocation() {
+		localStorage.removeItem('location');
+//		this.locationObserver.next();
+	}
+
+/*	category	*/
 	setCategory(data:any) {
 		let json: string = JSON.stringify(data);
 		localStorage.setItem('category', json);
@@ -67,6 +78,7 @@ export class GlobalService {
 		this.categoryObserver.next();
 	}
 
+/*	characteristics	*/
 	setCharacteristics(data:any) {
 		let json: string = JSON.stringify(MapTool.convertMapToObj (data));
 		localStorage.setItem('characteristics', json);
@@ -98,7 +110,8 @@ export class GlobalService {
 		this.characteristicsObserver.next();
 	}
 */
-	
+
+/*	filter	*/	
 	setFilter(data:any) {
 		let json: string = JSON.stringify(MapTool.convertMapToObj (data));
 		localStorage.setItem('filter', json);
@@ -114,9 +127,20 @@ export class GlobalService {
 	}
 
 	resetFilter() {
-		this.clearCharacteristics();
+		this.clearLocation();
 		this.clearCategory();
+		this.clearCharacteristics();
 		localStorage.removeItem('filter');
+	}
+
+	setFilterLocation() {
+		let map = this.getFilter()
+		let location = this.getLocation();
+		if (location) {
+			map.set('location', location);
+		}
+		this.setFilter(map);
+		this.clearLocation();
 	}
 
 /*
