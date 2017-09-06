@@ -10,20 +10,20 @@
 </ion-header>
 
 <ion-content>
-	<ion-list>
+	<ion-list no-lines>
 		<ion-item (click)="selectAll($event)">
 			<ion-thumbnail item-left>
 				<img src="assets/category/png/all.png"/>
 			</ion-thumbnail>
-			<ion-label>Все объявления</ion-label>
-			<ion-icon name="checkmark" item-right *ngIf="!current"></ion-icon>
+			<ion-label [ngClass]="{'current': !current}">Все объявления</ion-label>
+			<ion-icon name="checkmark" color="sur" item-right *ngIf="!current"></ion-icon>
 		</ion-item>
 		<ion-item *ngFor="let category of categoryList" (click)="itemTapped($event, category)">
 			<ion-thumbnail item-left>
 				<img src="assets/category/png/{{category.slug}}.png"/>
 			</ion-thumbnail>
-			{{category.name}}
-			<ion-icon name="checkmark" item-right *ngIf="category.id == current"></ion-icon>
+			<ion-label [ngClass]="{'current': category.id == current || category.id == rootInPath}">{{category.name}}</ion-label>
+			<ion-icon name="checkmark" color="sur" item-right *ngIf="category.id == current || category.id == rootInPath"></ion-icon>
 			<!-- <ion-icon name="arrow-forward" item-right *ngIf="category.is_parent == 1" class="icon-forward"></ion-icon>			 -->
 		</ion-item>
 	</ion-list>

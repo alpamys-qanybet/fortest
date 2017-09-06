@@ -18,6 +18,7 @@ import { SubcategoryPage } from './subcategory';
 export class CategoryPage {
 	categoryList: Array<{any}>;
 	current: any;
+	rootInPath: any;
 
 	constructor(
 		public navCtrl: NavController,
@@ -29,9 +30,10 @@ export class CategoryPage {
 		let category = this.global.getCategory();
 		if (category) {
 			this.current = category.item.id;
+			this.rootInPath = category.path[0].id;
 		}
 		let loader = this.loadingCtrl.create();
-		
+		loader.present();
 		this.api.fetchCategoryRoot((response) => {
 			let list = [];
 

@@ -1,0 +1,16 @@
+page-subcategory {
+	
+	ion-list {
+		
+		ion-item {
+
+			ion-label {
+				color: color($colors, qattysur, base);
+			}
+
+			ion-label.current {
+				color: color($colors, dark, base);
+			}
+		}
+	}
+}

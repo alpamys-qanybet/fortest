@@ -9,7 +9,7 @@ import { ApiService } from '../../app/services/api.service';
 import { GlobalService } from '../../app/services/global.service';
 
 @Component({
-	selector: 'subcategory-page',
+	selector: 'page-subcategory',
 	templateUrl: 'subcategory.html'
 })
 export class SubcategoryPage {

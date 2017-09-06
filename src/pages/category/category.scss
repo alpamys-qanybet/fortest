@@ -1,0 +1,27 @@
+page-category {
+	
+	ion-list {
+		
+		ion-item {
+
+			ion-thumbnail {
+				min-width: 26px !important;
+				min-height: 26px !important;
+
+				img {
+					width: 26px !important;
+					height: 26px !important;
+				}
+			}
+
+			ion-label {
+				font-size: 22px !important;
+				color: color($colors, qattysur, base);
+			}
+
+			ion-label.current {
+				color: color($colors, dark, base);
+			}
+		}
+	}
+}
