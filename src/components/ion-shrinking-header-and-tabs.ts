@@ -8,6 +8,7 @@ export class IonShrinkingHeaderAndTabs {
 
   // content is required to get scroll information
   @Input('ion-shrinking-header-and-tabs') content: Content;
+  @Input('enabled') enabled: boolean;
 
   // internals
   private ionHeaderElement: HTMLElement;
@@ -60,6 +61,9 @@ export class IonShrinkingHeaderAndTabs {
   }
 
   onContentScroll(e: any): void {
+    if (!this.enabled) {
+      return;
+    }
     let scrollTop = e.detail ? e.detail.scrollTop : (e.target ? e.target.scrollTop : 0);
 
     // add boundaries to scrollTop to support iOS bouncing scroll

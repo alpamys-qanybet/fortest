@@ -22,6 +22,7 @@ import { FilterPage } from '../filter/filter';
 })
 export class HomePage {
 	@ViewChild(Content) content: Content;
+	shrinkingEnabled: boolean = false;
 	
 	public loading:Loading;
 	host: string;
@@ -151,16 +152,19 @@ export class HomePage {
 
 		this.api.fetchProducts(this.productPage, filter, (response) => {
 			this.productIsMoreAvailable = response.info.currentPage < response.info.pageCount;
+
+			this.shrinkingEnabled = response.info.pageCount > 1;
 			this.productPage++;
 			
 			let list = response.response.data;
 			if (list.length > 0) {
 				this.productList = this.productList.concat(list);
 
-				this.productFetchAlreadyInProcess = false;
 				this.content.resize();
 			}
 			this.paginate(this.productList, 'grid', 2);
+			
+			this.productFetchAlreadyInProcess = false;
 			
 			fn();
 		}, (err) => {

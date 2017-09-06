@@ -1,4 +1,4 @@
-<ion-header [ion-shrinking-header-and-tabs]="content">
+<ion-header [ion-shrinking-header-and-tabs]="content" [enabled]="shrinkingEnabled">
 	<ion-toolbar color="primary">
 		<ion-buttons left>
 			<button ion-button icon-only (click)="openCategories($event)">
@@ -13,10 +13,10 @@
 			(ionClear)="clearSearch($event)">
 		</ion-searchbar>
 		<ion-buttons end>
-			<button ion-button icon-only (click)="toggleMode()">
+			<!--button ion-button icon-only (click)="toggleMode()">
 				<ion-icon name="grid-outline" *ngIf="mode == 'grid'"></ion-icon>
 				<ion-icon name="list-box-outline" *ngIf="mode == 'list'"></ion-icon>
-			</button>
+			</button-->
 			<button ion-button icon-only (click)="openFilter()">
 				<ion-icon name="options"></ion-icon>
 			</button>
@@ -24,7 +24,8 @@
 	</ion-toolbar>
 </ion-header>
 
-<ion-content no-bounce>
+<ion-content no-bounce overflow-scroll="false">
+	{{wkwebviewTest}}
 	<!-- fullscreen -->
 	<!-- overflow-scroll="false" -->
 	<!--ion-list>
@@ -109,7 +110,7 @@
 						<ion-col>
 							<p style="text-align: right">
 								<ion-icon name="time-outline" color="ashyqsur"></ion-icon>
-						 		{{item.end_time | timeago: 'date'}}
+						 		{{item.end_time | timeago: 'date-short'}}
 						 	</p>
 						</ion-col>
 					</ion-row>
