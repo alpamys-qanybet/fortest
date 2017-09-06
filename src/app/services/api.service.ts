@@ -124,7 +124,7 @@ export class ApiService {
 		let params: URLSearchParams = new URLSearchParams();
 		params.set('page', page);
 		requestOptions.search = params;
-/*
+
 		this.http.get(url, requestOptions)
 		.timeout(this.timeoutSequence)
 		.map( response => {
@@ -142,7 +142,7 @@ export class ApiService {
 		}, (err)=> {
 			fnErr(err);
 		});
-*/
+/*
 		this.http.get(url, requestOptions)
 		.timeout(this.timeoutSequence)
 		.map( response => this.mock.fetchProducts(page)).subscribe(data => {
@@ -150,5 +150,6 @@ export class ApiService {
 		}, (err)=> {
 			fnErr(err);
 		});
+*/
 	}
 }
