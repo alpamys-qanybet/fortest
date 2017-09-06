@@ -4,13 +4,19 @@ import { NumberTool } from '../tools/number.tool';
 @Pipe({name: 'timeago'})
 export class TimeAgoPipe implements PipeTransform {
 	transform(value: any, args: string): any {
+        if (!value) {
+            return 'Не указан';
+        }
+        var x = new Date(value).getTime();
+
+/*
         var x = 0;
         if (value) {
             x = new Date(value).getTime();
         } else {
             x = new Date().getTime();
         }
-
+*/
         var mode = 'full';
         if (args) {
             mode = args;
@@ -46,7 +52,7 @@ export class TimeAgoPipe implements PipeTransform {
             if (mode == 'date') {
                 return d.getDate() + ' ' + map[d.getMonth()].toLowerCase();
             } else if (mode == 'date-short') {
-                return d.getDate() + ' ' + map[d.getMonth()].toLowerCase().substr(0,4);
+                return d.getDate() + ' ' + map[d.getMonth()].toLowerCase().substr(0,3);
             } else if (mode == 'time') {
                 return NumberTool.decima(d.getHours()) + ':' + NumberTool.decima(d.getMinutes());
             }
