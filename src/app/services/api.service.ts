@@ -100,6 +100,9 @@ export class ApiService {
 		let url = this.baseUrl + '/product';
 		
 		let p = [];
+		if (filter.location) {
+			p.push('ProductSearch[location_id]=' + filter.location);
+		}
 		if (filter.category) {
 			p.push('ProductSearch[category_id]=' + filter.category);
 		}

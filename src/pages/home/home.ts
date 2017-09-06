@@ -130,8 +130,14 @@ export class HomePage {
 			this.productList = [];
 		}
 
-		let category = this.global.getCategory();
 		let filter: any = {};
+
+		let f = this.global.getFilter();
+		if (f.has('location')) {
+			filter.location = f.get('location').id;
+		}
+		
+		let category = this.global.getCategory();
 		if (category) {
 			filter.category = category.item.id;
 			this.categoryPath = category.path;
@@ -139,7 +145,6 @@ export class HomePage {
 			this.categoryPath = [];
 		}
 
-		let f = this.global.getFilter();
 		if (f.has('characteristics')) {
 			filter.characteristics = [];
 			for (let v of f.get('characteristics')) {
